@@ -29,7 +29,7 @@ print('Current directory: {}'.format(os.getcwd()))
 
 
 if not all_files:
-    print ('Directory does not contain {} files'.format(ext[0]))
+    print('Directory does not contain {} files'.format(ext[0]))
 
 # b. count the numner of code and comment lines
 # set the total counts for all files
@@ -70,7 +70,7 @@ for file in all_files:
 
 
 
-print('Summary for {}'.format(current_dir)) # assuming the current dir is my_python_projects
+print('Summary for {}'.format('.')) # assuming the current dir is my_python_projects
 print('--------------------')
 print('Comment lines: ' + str(comments))
 print('Code lines:    ' + str(line_count - blank_lines - comments))
@@ -111,8 +111,18 @@ def get_size(path):
 subfolders_path = [f.path for f in os.scandir('.') if f.is_dir()]
 
 # define secondary subfolders
-second_subfolders = [f.path for f in os.scandir(path) for path in subfolders_path if f.is_dir()]
-second_subfolders = list(set(second_subfolders))
+# subdirectories may not have folders; look for those with folders
+second_subfolders = []
+for i in subfolders_path:
+    for f in os.scandir(i):
+        try:
+            if f.is_dir():
+                second_subfolders.append(f.path)
+        except NameError:
+            continue
+
+# second_subfolders = [f.path for f in os.scandir(i) for i in subfolders_path if i.is_dir()]
+# second_subfolders = list(set(second_subfolders))
 
 print('{} size: {} mb'.format(os.getcwd(), get_size('.')))
 
